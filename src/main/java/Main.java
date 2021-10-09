@@ -1,9 +1,11 @@
-import engine.Window;
+import engine.IApplication;
+import engine.PaperEngine;
 
 public class Main {
     public static void main(String[] args) {
-        Window window = Window.get();
-        window.run();
-        System.out.println("Hello world");
+        System.out.println("a");
+        IApplication game = new TestSquareApp();
+        PaperEngine paperEngine = PaperEngine.get();
+        paperEngine.run(game);
     }
 }

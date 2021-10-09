@@ -1,5 +1,7 @@
 package engine;
 
+import org.joml.Vector2d;
+import org.joml.Vector2f;
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
@@ -18,6 +20,8 @@ public class Window {
     private long glfwWindow;
     private static Window window = null;
 
+    private int width = 480, height = 500;
+
     private Window() {
 
     }
@@ -29,22 +33,12 @@ public class Window {
         return Window.window;
     }
 
-    public void run() {
-        System.out.println("Hello LWJGL " + Version.getVersion() + "!");
-
-        init();
-        loop();
-
-        // Free the window callbacks and destroy the window
+    public void Destroy() {
         glfwFreeCallbacks(glfwWindow);
         glfwDestroyWindow(glfwWindow);
-
-        // Terminate GLFW and free the error callback
-        glfwTerminate();
-        glfwSetErrorCallback(null).free();
     }
 
-    private void init() {
+    public void init() {
         // Setup an error callback. The default implementation
         // will print the error message in System.err.
         GLFWErrorCallback.createPrint(System.err).set();
@@ -59,9 +53,14 @@ public class Window {
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // the window will be resizable
 
         // Create the window
-        glfwWindow = glfwCreateWindow(300, 300, "Hello World!", NULL, NULL);
+        glfwWindow = glfwCreateWindow(width, height, "Hello World!", NULL, NULL);
         if ( glfwWindow == NULL )
             throw new RuntimeException("Failed to create the GLFW window");
+
+        glfwSetFramebufferSizeCallback(glfwWindow, (window, width, height) -> {
+            this.width = width;
+            this.height = height;
+        });
 
         // Setup a key callback. It will be called every time a key is pressed, repeated or released.
         glfwSetKeyCallback(glfwWindow, (window, key, scancode, action, mods) -> {
@@ -97,27 +96,50 @@ public class Window {
         glfwShowWindow(glfwWindow);
     }
 
-    private void loop() {
-        // This line is critical for LWJGL's interoperation with GLFW's
-        // OpenGL context, or any context that is managed externally.
-        // LWJGL detects the context that is current in the current thread,
-        // creates the GLCapabilities instance and makes the OpenGL
-        // bindings available for use.
-        GL.createCapabilities();
-
-        // Set the clear color
-        glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
-
-        // Run the rendering loop until the user has attempted to close
-        // the window or has pressed the ESCAPE key.
-        while ( !glfwWindowShouldClose(glfwWindow) ) {
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
-
-            glfwSwapBuffers(glfwWindow); // swap the color buffers
-
-            // Poll for window events. The key callback above will only be
-            // invoked during this call.
-            glfwPollEvents();
-        }
+    public boolean isWindowOpen() {
+        return !glfwWindowShouldClose(glfwWindow);
     }
+
+    public int GetInput(int keyCode) {
+        return glfwGetKey(glfwWindow, keyCode);
+    }
+
+    public Vector2d GetCursorPos() {
+        DoubleBuffer posX = BufferUtils.createDoubleBuffer(1);
+        DoubleBuffer posY = BufferUtils.createDoubleBuffer(1);
+        glfwGetCursorPos(glfwWindow, posX, posY);
+        return new Vector2d(posX.get(0),posY.get(0));
+    }
+
+    private float red = 1.0f;
+    private float green = 0.0f;
+    private float blue = 0.0f;
+    private float alpha = 0.0f;
+
+    public void loop() {
+        glClearColor(red, green, blue, alpha);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
+
+        glfwSwapBuffers(glfwWindow); // swap the color buffers
+
+        // Poll for window events. The key callback above will only be
+        // invoked during this call.
+        glfwPollEvents();
+    }
+
+    public void clearColor(float red, float green, float blue, float alpha) {
+        this.red = red;
+        this.green = green;
+        this.blue = blue;
+        this.alpha = alpha;
+    }
+
+    public int GetWidth() {
+        return width;
+    }
+
+    public int GetHeight() {
+        return height;
+    }
+
 }
