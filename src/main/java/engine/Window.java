@@ -20,7 +20,7 @@ public class Window {
     private long glfwWindow;
     private static Window window = null;
 
-    private int width = 480, height = 500;
+    private int width = 1800, height = 900;
 
     private Window() {
 
@@ -89,6 +89,7 @@ public class Window {
 
         // Make the OpenGL context current
         glfwMakeContextCurrent(glfwWindow);
+        GL.createCapabilities();
         // Enable v-sync
         glfwSwapInterval(1);
 
@@ -116,22 +117,19 @@ public class Window {
     private float blue = 0.0f;
     private float alpha = 0.0f;
 
+
+
     public void loop() {
-        glClearColor(red, green, blue, alpha);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
-
-        glfwSwapBuffers(glfwWindow); // swap the color buffers
-
-        // Poll for window events. The key callback above will only be
-        // invoked during this call.
+        glfwSwapBuffers(glfwWindow);
         glfwPollEvents();
     }
 
     public void clearColor(float red, float green, float blue, float alpha) {
-        this.red = red;
-        this.green = green;
-        this.blue = blue;
-        this.alpha = alpha;
+        glClearColor(red, green, blue, alpha);
+    }
+
+    public void clear() {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
     }
 
     public int GetWidth() {

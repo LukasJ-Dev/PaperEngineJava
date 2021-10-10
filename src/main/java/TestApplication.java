@@ -35,7 +35,7 @@ public class TestApplication implements IApplication {
     }
 
     @Override
-    public void update() {
+    public void update(double deltaTime) {
 
         if(false) {
             double posX = InputManager.get().GetCursorPosition().x;

@@ -1,8 +1,8 @@
 package engine;
 
 public interface IApplication {
-    void init();
+    void init() throws Exception;
     void render();
-    void update();
+    void update(double delta);
     void input();
 }

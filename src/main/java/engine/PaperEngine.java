@@ -24,7 +24,7 @@ public class PaperEngine {
         return paperEngine;
     }
 
-    public void run(IApplication game) {
+    public void run(IApplication game) throws Exception {
         this.game = game;
         init();
         loop();
@@ -36,20 +36,28 @@ public class PaperEngine {
         glfwSetErrorCallback(null).free();
     }
 
-    private void init() {
+    private void init() throws Exception {
         window.init();
+
         game.init();
     }
 
     private void loop() {
-
-        GL.createCapabilities();
-
+        double deltaTime = 0;
+        double lastFrame = 0;
         while ( window.isWindowOpen()) {
-            window.loop();
-            game.update();
+            double currentFrame = glfwGetTime();
+            deltaTime = currentFrame - lastFrame;
+            lastFrame = currentFrame;
             game.input();
+
+            game.update(deltaTime);
+
+            window.loop();
             game.render();
+
+
+
         }
     }
 }

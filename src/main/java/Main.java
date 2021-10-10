@@ -6,6 +6,10 @@ public class Main {
         System.out.println("a");
         IApplication game = new TestSquareApp();
         PaperEngine paperEngine = PaperEngine.get();
-        paperEngine.run(game);
+        try {
+            paperEngine.run(game);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
