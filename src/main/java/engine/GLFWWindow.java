@@ -1,5 +1,6 @@
 package engine;
 
+import engine.renderer.IWindow;
 import org.joml.Vector2d;
 import org.joml.Vector2f;
 import org.lwjgl.*;
@@ -15,22 +16,16 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
-public class Window {
+public class GLFWWindow implements IWindow {
     // The window handle
     private long glfwWindow;
-    private static Window window = null;
 
     private int width = 1800, height = 900;
 
-    private Window() {
+    private String title = "Hello World!";
 
-    }
+    public GLFWWindow() {
 
-    public static Window get() {
-        if(Window.window == null) {
-            Window.window = new Window();
-        }
-        return Window.window;
     }
 
     public void Destroy() {
@@ -53,7 +48,7 @@ public class Window {
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // the window will be resizable
 
         // Create the window
-        glfwWindow = glfwCreateWindow(width, height, "Hello World!", NULL, NULL);
+        glfwWindow = glfwCreateWindow(width, height, title, NULL, NULL);
         if ( glfwWindow == NULL )
             throw new RuntimeException("Failed to create the GLFW window");
 
@@ -97,6 +92,14 @@ public class Window {
         glfwShowWindow(glfwWindow);
     }
 
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
     public boolean isWindowOpen() {
         return !glfwWindowShouldClose(glfwWindow);
     }
@@ -105,33 +108,25 @@ public class Window {
         return glfwGetKey(glfwWindow, keyCode);
     }
 
-    public Vector2d GetCursorPos() {
+    public Vector2d GetCursorPosVector2d() {
         DoubleBuffer posX = BufferUtils.createDoubleBuffer(1);
         DoubleBuffer posY = BufferUtils.createDoubleBuffer(1);
         glfwGetCursorPos(glfwWindow, posX, posY);
         return new Vector2d(posX.get(0),posY.get(0));
     }
 
-    private float red = 1.0f;
-    private float green = 0.0f;
-    private float blue = 0.0f;
-    private float alpha = 0.0f;
-
-
-
+    public Vector2f GetCursorPosVector2f() {
+        DoubleBuffer posX = BufferUtils.createDoubleBuffer(1);
+        DoubleBuffer posY = BufferUtils.createDoubleBuffer(1);
+        glfwGetCursorPos(glfwWindow, posX, posY);
+        return new Vector2f((float)posX.get(0),(float)posY.get(0));
+    }
+    
     public void loop() {
         glfwSwapBuffers(glfwWindow);
         glfwPollEvents();
     }
-
-    public void clearColor(float red, float green, float blue, float alpha) {
-        glClearColor(red, green, blue, alpha);
-    }
-
-    public void clear() {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
-    }
-
+    
     public int GetWidth() {
         return width;
     }

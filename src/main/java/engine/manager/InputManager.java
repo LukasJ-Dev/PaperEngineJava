@@ -1,15 +1,17 @@
-package engine;
+package engine.manager;
 
-import org.joml.Vector2d;
+import engine.PaperEngine;
+import engine.renderer.IWindow;
+import org.joml.Vector2f;
 
 import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
 
 public class InputManager {
     private static InputManager inputManager = null;
-    private Window window;
+    private IWindow window;
 
     private InputManager() {
-        window = Window.get();
+        window = PaperEngine.window;
     }
 
     public static InputManager get() {
@@ -23,15 +25,11 @@ public class InputManager {
         return window.GetInput(keyCode);
     }
 
-    public Vector2d GetCursorPosition() {
-        return window.GetCursorPos();
-    }
-
     public boolean isKeyPressed(int keyCode) {
         return window.GetInput(keyCode) == GLFW_PRESS;
     }
 
-    public void GetMousePosition() {
-
+    public Vector2f GetMousePosition() {
+        return window.GetCursorPosVector2f();
     }
 }

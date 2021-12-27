@@ -1,27 +1,21 @@
 package engine;
 
-import org.lwjgl.opengl.GL;
+import engine.manager.InputManager;
+import engine.renderer.IWindow;
 
 import static org.lwjgl.glfw.GLFW.*;
 
 public class PaperEngine {
 
     private static PaperEngine paperEngine;
-    private IApplication game;
-    private Window window;
-    private InputManager inputManager;
+    public static IApplication game;
+    public static IWindow window;
+    public static InputManager inputManager;
 
 
-    private PaperEngine() {
-        window = Window.get();
+    public PaperEngine(IWindow window) {
+        this.window = window;
         inputManager = InputManager.get();
-    }
-
-    public static PaperEngine get() {
-        if(paperEngine == null) {
-            paperEngine = new PaperEngine();
-        }
-        return paperEngine;
     }
 
     public void run(IApplication game) throws Exception {
