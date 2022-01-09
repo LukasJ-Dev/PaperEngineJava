@@ -85,6 +85,9 @@ public class GLFWWindow implements IWindow {
         // Make the OpenGL context current
         glfwMakeContextCurrent(glfwWindow);
         GL.createCapabilities();
+
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
         // Enable v-sync
         glfwSwapInterval(1);
 

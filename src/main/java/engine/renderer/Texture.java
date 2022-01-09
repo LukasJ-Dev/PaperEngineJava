@@ -43,11 +43,12 @@ public class Texture {
         this.Height = height.get(0);
 
         if (image != null) {
+            System.out.println(channels.get(0));
             if (channels.get(0) == 3) {
-                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width.get(0), height.get(0),
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, this.Width, this.Height,
                         0, GL_RGB, GL_UNSIGNED_BYTE, image);
             } else if (channels.get(0) == 4) {
-                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width.get(0), height.get(0),
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, this.Width, this.Height,
                         0, GL_RGBA, GL_UNSIGNED_BYTE, image);
             } else {
                 assert false : "Error: (Texture) Unknown number of channels '" + channels.get(0) + "'";

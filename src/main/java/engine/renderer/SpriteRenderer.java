@@ -3,8 +3,11 @@ package engine.renderer;
 import engine.FileManager;
 import engine.manager.ResourceManager;
 import org.joml.*;
+import org.lwjgl.BufferUtils;
 
 import java.lang.Math;
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
 import static org.lwjgl.opengl.GL15.*;
@@ -49,9 +52,10 @@ public class SpriteRenderer {
         ResourceManager.get().getShader("Sprite").unbind();
     }
 
-    public void setProjectionMatrix(Matrix4f projectionMatrix) {
+    public void setProjectionMatrix(Matrix4f projectionMatrix, Matrix4f viewMatrix) {
         ResourceManager.get().getShader("Sprite").bind();
         ResourceManager.get().getShader("Sprite").uploadMat4f("projection", projectionMatrix);
+        ResourceManager.get().getShader("Sprite").uploadMat4f("view", viewMatrix);
         ResourceManager.get().getShader("Sprite").unbind();
 
         this.projectionMatrix = projectionMatrix;
@@ -66,8 +70,7 @@ public class SpriteRenderer {
                 0.0f, 0.0f, 1.0f, 0.0f,
                 0.0f, 0.0f, 0.0f, 1.0f
         );
-
-        Vector2f size = new Vector2f(texture.getWidth() * scale.x * 0.5f, texture.getHeight() * scale.y * 0.5f);
+        Vector2f size = new Vector2f(texture.getWidth() * scale.x, texture.getHeight() * scale.y);
 
         model.translate(new Vector3f(new Vector2f(position.x - size.x*0.5f, position.y - size.y *0.5f), 0.0f));
         model.translate(new Vector3f(new Vector2f(size.x*0.5f, size.y*0.5f), 0.0f));
@@ -85,32 +88,76 @@ public class SpriteRenderer {
         texture.bind();
 
         glBindVertexArray(vaoID);
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        glEnableVertexAttribArray(0);
+
+        glDrawElements(GL_TRIANGLES, indices.length, GL_UNSIGNED_INT, 0);
+
+        glDisableVertexAttribArray(0);
+        //glDrawArrays(GL_TRIANGLES, 0, 6);
         glBindVertexArray(0);
 
         ResourceManager.get().getShader("Sprite").unbind();
 
     }
 
+    int[] indices = {
+            2, 1, 0,
+            0, 1, 3
+
+    };
+
     public void initRenderData() {
         float[] vertices = {
-                0.0f, 1.0f, 0.0f, 1.0f,
-                1.0f, 0.0f, 1.0f, 0.0f,
-                0.0f, 0.0f, 0.0f, 0.0f,
-
-                0.0f, 1.0f, 0.0f, 1.0f,
-                1.0f, 1.0f, 1.0f, 1.0f,
-                1.0f, 0.0f, 1.0f, 0.0f,
+                1.0f, 0.0f,   1.0f, 1.0f,
+                0.0f, 1.0f,   0.0f, 0.0f,
+                1.0f, 1.0f,   1.0f, 0.0f,
+                0.0f, 0.0f,   0.0f, 1.0f,
         };
 
+
+/*
+        float[] vertices = {
+                0.0f, 1.0f,   1.0f, 0.0f,
+                1.0f, 0.0f,   0.0f, 1.0f,
+                0.0f, 0.0f,   1.0f, 1.0f,
+
+                0.0f, 1.0f,   1.0f, 0.0f,
+                1.0f, 1.0f,   0.0f, 0.0f,
+                1.0f, 0.0f,   0.0f, 1.0f,
+        };*/
+        /*
+                float[] vertices = {
+                0.0f, 1.0f,   0.0f, 1.0f,
+                1.0f, 0.0f,   1.0f, 0.0f,
+                0.0f, 0.0f,   0.0f, 0.0f,
+
+                0.0f, 1.0f,   0.0f, 1.0f,
+                1.0f, 1.0f,   1.0f, 1.0f,
+                1.0f, 0.0f,   1.0f, 0.0f,
+        };
+         */
+
+
+
         vaoID = glGenVertexArrays();
-        vboID = glGenBuffers();
-
-        glBindBuffer(GL_ARRAY_BUFFER, vboID);
-        glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
-
-
         glBindVertexArray(vaoID);
+
+        FloatBuffer vertexBuffer = BufferUtils.createFloatBuffer(vertices.length);
+        vertexBuffer.put(vertices).flip();
+
+        vboID = glGenBuffers();
+        glBindBuffer(GL_ARRAY_BUFFER, vboID);
+        glBufferData(GL_ARRAY_BUFFER, vertexBuffer, GL_STATIC_DRAW);
+
+        IntBuffer elementBuffer = BufferUtils.createIntBuffer(indices.length);
+        elementBuffer.put(indices).flip();
+
+        eboID = glGenBuffers();
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementBuffer, GL_STATIC_DRAW);
+
+
 
         glEnableVertexAttribArray(0);
         int positionsSize = 4;
