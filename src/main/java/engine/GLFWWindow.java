@@ -55,6 +55,7 @@ public class GLFWWindow implements IWindow {
         glfwSetFramebufferSizeCallback(glfwWindow, (window, width, height) -> {
             this.width = width;
             this.height = height;
+            glViewport(0,0,width, height);
         });
 
         // Setup a key callback. It will be called every time a key is pressed, repeated or released.
@@ -103,27 +104,14 @@ public class GLFWWindow implements IWindow {
         return height;
     }
 
+    public long GetNativeWindow() {
+        return glfwWindow;
+    }
+
     public boolean isWindowOpen() {
         return !glfwWindowShouldClose(glfwWindow);
     }
 
-    public int GetInput(int keyCode) {
-        return glfwGetKey(glfwWindow, keyCode);
-    }
-
-    public Vector2d GetCursorPosVector2d() {
-        DoubleBuffer posX = BufferUtils.createDoubleBuffer(1);
-        DoubleBuffer posY = BufferUtils.createDoubleBuffer(1);
-        glfwGetCursorPos(glfwWindow, posX, posY);
-        return new Vector2d(posX.get(0),posY.get(0));
-    }
-
-    public Vector2f GetCursorPosVector2f() {
-        DoubleBuffer posX = BufferUtils.createDoubleBuffer(1);
-        DoubleBuffer posY = BufferUtils.createDoubleBuffer(1);
-        glfwGetCursorPos(glfwWindow, posX, posY);
-        return new Vector2f((float)posX.get(0),(float)posY.get(0));
-    }
     
     public void loop() {
         glfwSwapBuffers(glfwWindow);

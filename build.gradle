@@ -14,6 +14,11 @@ project.ext.jomlVersion = "1.10.2"
 project.ext.lwjglNatives = "natives-windows"
 
 dependencies {
+
+
+    // https://mvnrepository.com/artifact/org.luaj/luaj-jse
+    implementation group: 'org.luaj', name: 'luaj-jse', version: '3.0-beta2'
+
     implementation platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
 
     implementation "org.lwjgl:lwjgl"

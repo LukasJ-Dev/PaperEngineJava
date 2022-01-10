@@ -1,6 +1,8 @@
 package example.flappybird;
 
 import engine.IApplication;
+import engine.KeyCode;
+import engine.PaperEngine;
 import engine.manager.ResourceManager;
 import engine.renderer.Camera;
 import engine.renderer.SpriteRenderer;
@@ -20,7 +22,7 @@ public class FlappyBird implements IApplication {
     private ObstacleGenerator obstacleGenerator;
 
     @Override
-    public void init() throws Exception {
+    public void init() {
         ResourceManager.get().setTexture("bird", new Texture("resources/flappybird/bird_wingdown.png"));
         ResourceManager.get().setTexture("pipe", new Texture("resources/flappybird/pipe_middle.png"));
         ResourceManager.get().setTexture("pipetop", new Texture("resources/flappybird/pipe_top.png"));

@@ -1,6 +1,7 @@
 package engine;
 
-import engine.manager.InputManager;
+import engine.manager.GLFWInput;
+import engine.manager.IInput;
 import engine.renderer.IWindow;
 
 import static org.lwjgl.glfw.GLFW.*;
@@ -10,12 +11,12 @@ public class PaperEngine {
     private static PaperEngine paperEngine;
     public static IApplication game;
     public static IWindow window;
-    public static InputManager inputManager;
+    public static IInput input;
 
 
-    public PaperEngine(IWindow window) {
+    public PaperEngine(IWindow window, IInput inputClass) {
         this.window = window;
-        inputManager = InputManager.get();
+        input = inputClass;
     }
 
     public void run(IApplication game) throws Exception {
@@ -30,7 +31,7 @@ public class PaperEngine {
         glfwSetErrorCallback(null).free();
     }
 
-    private void init() throws Exception {
+    private void init()  {
         window.init();
 
         game.init();

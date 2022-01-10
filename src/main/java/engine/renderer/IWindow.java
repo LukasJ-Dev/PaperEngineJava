@@ -10,8 +10,4 @@ public interface IWindow {
 
     int getWidth();
     int getHeight();
-
-    int GetInput(int keyCode);
-    Vector2f GetCursorPosVector2f();
-    Vector2d GetCursorPosVector2d();
 }
