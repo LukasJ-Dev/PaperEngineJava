@@ -17,7 +17,6 @@ public class PipeObstacle {
     private int size = 128;
 
     public PipeObstacle(Vector2f position, int pipeHeight, int height, int gap) {
-
         this.position = position;
         this.pipeHeight = pipeHeight;
         this.height = height;

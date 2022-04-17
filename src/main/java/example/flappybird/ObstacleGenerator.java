@@ -29,7 +29,7 @@ public class ObstacleGenerator {
             position = new Vector2f(size * spacing,0.0f).add(lastPositionOfObstacle);
 
         }
-        PipeObstacle pipeObstacle = new PipeObstacle(position, 10,height,2);
+        PipeObstacle pipeObstacle = new PipeObstacle(position, 14,height,2);
 
         obstacles.add(
                 pipeObstacle
@@ -43,7 +43,6 @@ public class ObstacleGenerator {
         Random random = new Random();
         for (int i = 0; i < amount; i++) {
             int height = random.nextInt((max - min) + 1) + min;
-            System.out.println("a : " + height);
             addObstacle(height);
         }
     }

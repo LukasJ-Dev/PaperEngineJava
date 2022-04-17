@@ -7,11 +7,10 @@ import luaManager.LuaGameManager;
 
 public class Main {
     public static void main(String[] args) {
-        //IApplication game = new FlappyBird();
-        //PaperEngine paperEngine = new PaperEngine(new GLFWWindow(), new GLFWInput());
-        new LuaGameManager().init();
+        IApplication game = new FlappyBird();
+        PaperEngine paperEngine = new PaperEngine(new GLFWWindow(), new GLFWInput());
         try {
-            //paperEngine.run(game);
+            paperEngine.run(game);
         } catch (Exception e) {
             e.printStackTrace();
         }

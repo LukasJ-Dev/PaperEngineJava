@@ -8,8 +8,10 @@ public class LuaGame {
     public static void Load(String game) {
         String gamePath = "PaperEngineGames/games/" + game;
         Globals globals = JsePlatform.standardGlobals();
-        LuaValue chunk = globals.loadfile("config.lua");
+        LuaValue chunk = globals.loadfile(gamePath + "/config.lua");
         //Load game/{game}/config.lua
+        LuaValue assetslua = chunk.get("assets");
+        System.out.println(assetslua);
         String[] assets = {}; //Load assets to array from config.lua
         for(int i = 0; 0 < assets.length; i++) {
             //Load assets/{assets[i]}/config.lua and load in the textures and audio

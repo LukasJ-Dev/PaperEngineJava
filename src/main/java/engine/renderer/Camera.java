@@ -8,6 +8,7 @@ import org.joml.Vector3f;
 public class Camera {
     private Matrix4f projection, viewMatrix;
     public Vector2f focusPosition;
+    public float zoom = 1.25f;
 
     public Camera(Vector2f focusPosition) {
         this.focusPosition = focusPosition;
@@ -23,16 +24,14 @@ public class Camera {
     public void adjustProjection() {
         projection.identity();
 
-        projection.ortho(0.0f, PaperEngine.window.getWidth(), 0.0f, PaperEngine.window.getHeight(), 0.0f, 100.0f);
-        /*projection = projection.ortho(position.x - PaperEngine.window.getWidth()/2, position.x + PaperEngine.window.getWidth()/2,
-                position.y + PaperEngine.window.getHeight()/2, position.y - PaperEngine.window.getHeight()/2, -1.0f, 1.0f);*/
+        projection.ortho(0.0f, PaperEngine.window.getWidth() * zoom, 0.0f, PaperEngine.window.getHeight() * zoom, 0.0f, 100.0f);
     }
 
     public Matrix4f getViewMatrix() {
         Vector3f cameraFront = new Vector3f(0.0f, 0.0f, -1.0f);
         Vector3f cameraUp = new Vector3f(0.0f, 1.0f, 0.0f);
 
-        Vector2f position = new Vector2f(focusPosition.x - PaperEngine.window.getWidth()/2, focusPosition.y - PaperEngine.window.getHeight()/2);
+        Vector2f position = new Vector2f(focusPosition.x - (PaperEngine.window.getWidth() * zoom)/2, focusPosition.y - (PaperEngine.window.getHeight() * zoom)/2);
 
         this.viewMatrix.identity();
         viewMatrix.lookAt(new Vector3f(position.x, position.y, 20.0f),
