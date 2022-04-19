@@ -22,7 +22,7 @@ public class GLFWWindow implements IWindow {
 
     private int width = 1800, height = 900;
 
-    private String title = "Hello World!";
+    private String title = "Paper Engine Game";
 
     public GLFWWindow() {
 
@@ -49,6 +49,7 @@ public class GLFWWindow implements IWindow {
 
         // Create the window
         glfwWindow = glfwCreateWindow(width, height, title, NULL, NULL);
+
         if ( glfwWindow == NULL )
             throw new RuntimeException("Failed to create the GLFW window");
 
@@ -94,6 +95,10 @@ public class GLFWWindow implements IWindow {
 
         // Make the window visible
         glfwShowWindow(glfwWindow);
+    }
+
+    public void setTitle(String title) {
+        GLFW.glfwSetWindowTitle(glfwWindow, title);
     }
 
     public int getWidth() {

@@ -7,6 +7,7 @@ public interface IWindow {
     void init();
     boolean isWindowOpen();
     void loop();
+    void setTitle(String title);
 
     int getWidth();
     int getHeight();

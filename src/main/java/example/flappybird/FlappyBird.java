@@ -17,7 +17,7 @@ public class FlappyBird implements IApplication {
 
     private SpriteRenderer spriteRenderer;
     private Camera camera;
-    private Vector2f pos1 = new Vector2f(0.0f, 100.0f);
+    private Vector2f pos1 = new Vector2f(0.0f, 600.0f);
     private ObstacleGenerator obstacleGenerator;
 
     @Override
@@ -42,8 +42,9 @@ public class FlappyBird implements IApplication {
         camera.adjustProjection();
         spriteRenderer.setProjectionMatrix(camera.getProjection(), camera.getViewMatrix());
 
-        glClearColor(0.0f,0.0f,0.0f,1.0f);
+        glClearColor(0.0f,0.5f,5.0f,1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        obstacleGenerator.render(spriteRenderer);
         spriteRenderer.DrawSprite(ResourceManager.get().getTexture(birdTexture), pos1, new Vector2f(5.0f,5.0f), rotate, new Vector4f(1.0f,1.0f,1.0f,1.0f));
     }
 
@@ -60,8 +61,12 @@ public class FlappyBird implements IApplication {
 
     @Override
     public void update(double delta) {
-
-
+        camera.setFocusPosition(pos1);
+        pos1.y -= speed * delta;
+        pos1.x += speed * delta;
+        if(PaperEngine.input.isKeyPressed(KeyCode.PAPER_KEY_SPACE)) {
+            pos1.y+=speed*delta;
+        }
 
 
 /*
